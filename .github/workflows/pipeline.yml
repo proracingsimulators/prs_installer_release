@@ -13,9 +13,13 @@ jobs:
 
     steps:
     
-    - name: Checkout submodules
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      with:
+        submodules: 'true'
+
+    - name: Checkout submodules to correct branch
       run: |
-        git submodule update --init --recursive
         git submodule foreach 'git checkout $(git rev-parse --abbrev-ref HEAD) && git pull origin $(git rev-parse --abbrev-ref HEAD)'
 
     - name: Setup .NET SDK
