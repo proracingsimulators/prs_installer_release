@@ -1,13 +1,13 @@
 ﻿{
   "Name": "Pro Racing Software",
-  "Version": "0.10.9077.33457",
-  "ReleaseDate": "07/11/2024",
+  "Version": "0.11.9189.34498",
+  "ReleaseDate": "27/02/2025",
   "Author": "Pro Racing Simulators",
   "Description": "Software para ajustes, configurações e diagnóstico de periféricos e dispositivos nas plataformas de simulação da Pro Racing Simulators.",
-  "Beta": "https://github.com/proracingsimulators/prs_release/releases/download/v0.10.9077.33457-beta/SetupPrsApp.exe",
-  "Stable": "https://github.com/proracingsimulators/prs_release/releases/download/v0.10.9077.33457/SetupPrsApp.exe",
+  "Beta": "https://github.com/proracingsimulators/prs_release/releases/download/v0.11.9189.34498-beta/Prs.App.Setup.exe",
+  "Stable": "https://github.com/proracingsimulators/prs_release/releases/download/v0.11.9189.34498/Prs.App.Setup.exe",
   "Package": null,
-  "ManifestVersion": "v3",
+  "ManifestVersion": "v2",
   "Changelog": [
     {
       "Version": "0.1.0.4",
@@ -96,8 +96,8 @@
       ]
     },
     {
-      "Version": "0.9.8999.27061",
-      "ReleaseDate": "21/08/2024",
+      "Version": "0.9.8998.21447",
+      "ReleaseDate": "20/08/2024",
       "Changes": [
         "Modificado esquema de versionamento da aplicação",
         "Modificado esquema de versionamento dos módulos da aplicação",
@@ -116,35 +116,8 @@
       ]
     },
     {
-      "Version": "0.10.9005.31365",
-      "ReleaseDate": "27/08/2024",
-      "Changes": [
-        "Criado novas opções de calibração na aplicação do shaker"
-      ]
-    },
-    {
-      "Version": "0.9.9006.12645",
-      "ReleaseDate": "28/08/2024",
-      "Changes": [
-        "Modificado esquema de versionamento da aplicação",
-        "Modificado esquema de versionamento dos módulos da aplicação",
-        "Removido patch do Flight Simulator",
-        "Defindo limite mínimo para sensibilidade do batente - DirectDrive",
-        "Adicionado logs de funcionamento no PedalPRS",
-        "Adicionado logs de funcionamento das telas",
-        "Implementado Sistema de vibração - Shaker",
-        "Modificado plugins Assetto Corsa, Assetto Corsa Competizione, Automobilista2, F1 2018, F1 2022, F1 2023 e IRacing para compatibilidade com Shaker",
-        "Modificado motion para que o dispositivo seja inicializado na tela principal do PRS",
-        "Removido maple_dfu da instalação inicial",
-        "Adicionado donwload do maple_dfu durante instalação dos drivers de atualização de firmware do Motion e do PedalPRS",
-        "Criado instalador alternativo",
-        "Implementado  efeito TractionControlStatus (TC Status)",
-        "Modificado plugins Automobilista, rFactor, DirtRally 2.0 e Flight Simulator para compatibilidade com Shaker"
-      ]
-    },
-    {
-      "Version": "0.10.9077.33457",
-      "ReleaseDate": "07/11/2024",
+      "Version": "0.10.9090.28283",
+      "ReleaseDate": "20/11/2024",
       "Changes": [
         "Adicionado tela para atualização de firmware na aplicação DirectDrivePRS",
         "Adicionado efeitos Desktop Inércia e Desktop Fricção no DirecrDrivePRS",
@@ -154,13 +127,25 @@
         "Refatorado aquisição do efeito RoadRumble nos plugins",
         "Corrigido BUG de conexão no motion ao reiniciar jogos",
         "Adicionado efeito Traction Control nos plugins: AssettoCorsa, AssettoCorsaCompetizione e Automobilista2",
-        "Implementado plugin LeMansUltimate",
+        "Implementado plugin LeMansUltimate e F1x2024",
         "Implementado efeito Road Impacts",
         "Adicionado efeito Redução de Força Curva de Alta no Direct Drive",
         "Adicionado efeito Road Impacts no plugin Dirt2x0, iRacing, e Automobilista 2",
         "Incrementado versão do arquivo de manifesto do repositório de release",
         "Ajustado timeout do direct drive para 100ms",
-        "Adicionado efeito Road Impacts nos plugins AssettoCorsa, AssettoCorsaCompetizione, Automobilista, F1x2018, F1x2022, F1x2023, LeMansUltimate e RFactor2"
+        "Adicionado efeito Road Impacts nos plugins AssettoCorsa, AssettoCorsaCompetizione, Automobilista, F1x2018, F1x2022, F1x2023, LeMansUltimate e RFactor2",
+        "Adicionado mensagem de aviso ao detectar mudança na conexão USB do shaker"
+      ]
+    },
+    {
+      "Version": "0.11.9189.34498",
+      "ReleaseDate": "27/02/2025",
+      "Changes": [
+        "Adicionado tela para monitoramento do câmbio de marcha",
+        "Adicionado projeto do cinto de segurança",
+        "Adicionado serviço prs_service",
+        "Criado nova aplicação do pedal para dar suporte a nova versão de firmware",
+        "Migração dos plugins de aquisição de dados para leitura dos dados via prs_service"
       ]
     }
   ]
