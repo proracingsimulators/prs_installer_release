@@ -12,25 +12,35 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    
+
+    # Step para checkout do repositório principal
     - name: Checkout repository
       uses: actions/checkout@v2
       with:
-        submodules: 'true'
+        submodules: 'true'  # Certifica-se de que os submódulos sejam verificados
 
+    # Step para garantir que os submódulos estão na branch correta
     - name: Checkout submodules to correct branch
       run: |
         git submodule foreach 'git checkout $(git rev-parse --abbrev-ref HEAD) && git pull origin $(git rev-parse --abbrev-ref HEAD)'
 
+    # Setup .NET SDK
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: '8.0.x'
 
+    # Verifique o diretório atual para garantir o caminho correto
+    - name: Verify directory structure
+      run: |
+        tree
+
+    # Build .NET solution
     - name: Build .NET solution
       run: |
         dotnet build prs_app/ProRacingSoftware.sln
 
+    # List files in prs_release/beta
     - name: List files in prs_release/beta
       run: |
         dir prs_release\beta
