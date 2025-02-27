@@ -23,7 +23,7 @@ jobs:
     # Step para garantir que os submódulos estão na branch correta
     - name: Checkout submodules to correct branch
       run: |
-        BRANCH_NAME=${GITHUB_REF##*/}
+        $BRANCH_NAME = $Env:GITHUB_REF.Split('/')[-1]
         git submodule foreach "git checkout $BRANCH_NAME && git pull origin $BRANCH_NAME"
         
     # Step para logar as branches dos submódulos
