@@ -23,8 +23,7 @@ jobs:
     # Step para garantir que os submódulos estão na branch correta
     - name: Checkout submodules to correct branch
       run: |
-        BRANCH_NAME=${GITHUB_REF##*/}  # Extrai a parte da branch do GITHUB_REF (ex: 'refs/heads/develop' -> 'develop')
-        git submodule foreach "git checkout $BRANCH_NAME && git pull origin $BRANCH_NAME"
+        git submodule foreach "git checkout $BRANCH_NAME && git pull origin ${GITHUB_REF} E"
         
     # Step para logar as branches dos submódulos
     - name: Log submodule branches
