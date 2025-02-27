@@ -35,8 +35,8 @@ jobs:
     # Setup .NET Framework
     - name: Install .NET Framework build tools
       run: |
-        choco install visualstudio2019-buildtools -y --no-progress
-        choco install visualstudio2019-workload-manageddesktop -y --no-progress
+        choco install visualstudio2022buildtools -y --no-progress
+        choco install visualstudio2022-workload-manageddesktop -y --no-progress
       shell: pwsh
         
 
