@@ -1,11 +1,11 @@
 ﻿{
   "Name": "Pro Racing Software",
-  "Version": "0.11.9189.34498",
+  "Version": "0.11.9189.35707",
   "ReleaseDate": "27/02/2025",
   "Author": "Pro Racing Simulators",
   "Description": "Software para ajustes, configurações e diagnóstico de periféricos e dispositivos nas plataformas de simulação da Pro Racing Simulators.",
-  "Beta": "https://github.com/proracingsimulators/prs_release/releases/download/v0.11.9189.34498-beta/Prs.App.Setup.exe",
-  "Stable": "https://github.com/proracingsimulators/prs_release/releases/download/v0.11.9189.34498/Prs.App.Setup.exe",
+  "Beta": "https://github.com/proracingsimulators/prs_release/releases/download/v0.11.9189.35707-beta/Prs.App.Setup.exe",
+  "Stable": "https://github.com/proracingsimulators/prs_release/releases/download/v0.11.9189.35707/Prs.App.Setup.exe",
   "Package": null,
   "ManifestVersion": "v2",
   "Changelog": [
@@ -138,7 +138,7 @@
       ]
     },
     {
-      "Version": "0.11.9189.34498",
+      "Version": "0.11.9189.35707",
       "ReleaseDate": "27/02/2025",
       "Changes": [
         "Adicionado tela para monitoramento do câmbio de marcha",
