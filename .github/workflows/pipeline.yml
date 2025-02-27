@@ -17,7 +17,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.PAT_TOKEN }}
         submodules: 'true'  # Certifica-se de que os submódulos sejam verificados
 
     # Step para garantir que os submódulos estão na branch correta
