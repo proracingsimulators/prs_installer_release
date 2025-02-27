@@ -1,0 +1,32 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - develop
+      - release
+      - main
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    
+    - name: Checkout submodules
+      run: |
+        git submodule update --init --recursive
+        git submodule foreach 'git checkout $(git rev-parse --abbrev-ref HEAD) && git pull origin $(git rev-parse --abbrev-ref HEAD)'
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Build .NET solution
+      run: |
+        dotnet build prs_app/ProRacingSoftware.sln
+
+    - name: List files in prs_release/beta
+      run: |
+        dir prs_release\beta
