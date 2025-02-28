@@ -27,23 +27,25 @@ jobs:
         git submodule foreach "git checkout $BRANCH_NAME && git pull origin $BRANCH_NAME"
         
     # Setup .NET SDK
-    - name: Setup .NET SDK
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: '8.0.x'
+    - name: Install .NET SDK
+      run: choco install dotnet-8.0-sdk -y --no-progress
+      shell: pwsh
 
     # Setup .NET Framework
-    - name: Install .NET Framework build tools
+    - name: Install .NET Framework and required workloads
       run: |
         choco install visualstudio2022buildtools -y --no-progress
         choco install visualstudio2022-workload-manageddesktop -y --no-progress
+        choco install visualstudio2022-workload-netcorebuildtools -y --no-progress
+        choco install netfx-4.8-devpack -y --no-progress
       shell: pwsh
-        
-
-    # Verifique o diretório atual para garantir o caminho correto
-    - name: Verify directory structure
+      
+    # Check .NET available SDKs
+    - name: Ensure .NET SDK is available for MSBuild
       run: |
-        tree
+        echo "##[debug] .NET SDKs disponíveis:"
+        dotnet --list-sdks
+      shell: pwsh
 
     # Build .NET solution
     - name: Build .NET solution
