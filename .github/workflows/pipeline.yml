@@ -48,7 +48,7 @@ jobs:
     # Build .NET solution
     - name: Build .NET solution
       run: |
-        "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\Bin\MSBuild.exe" prs_app/ProRacingSoftware.sln /p:Configuration=Release /p:Platform="Any CPU"
+        & "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\Bin\MSBuild.exe" "prs_app/ProRacingSoftware.sln" /p:Configuration=Release /p:Platform="Any CPU"
 
     # List files in prs_release/beta
     - name: List files in prs_release/beta
