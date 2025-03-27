@@ -101,10 +101,10 @@ jobs:
     
     - name: Create and push tag
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
       run: |
         git tag v${{ env.RELEASE_VERSION }}
-        git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git v${{ env.RELEASE_VERSION }}
+        git push https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/${{ github.repository }}.git v${{ env.RELEASE_VERSION }}
 
     # Create release
     - name: Create release
