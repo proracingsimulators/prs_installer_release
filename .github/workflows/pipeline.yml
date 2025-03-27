@@ -24,8 +24,6 @@ jobs:
       shell: pwsh
       run: |
         echo "PROJECT_NAME=hg_app" >> $GITHUB_ENV
-        echo "RELEASE_DIRECTORY=./release" >> $GITHUB_ENV
-        echo "RELEASE_CHANGELOG=changes.md" >> $GITHUB_ENV
 
     - name: Set alpha env
       if: ${{ github.ref == 'refs/heads/develop' }}
@@ -53,8 +51,6 @@ jobs:
       shell: pwsh
       run: |
         echo "ZIP_FILENAME=prs_app" >> $env:GITHUB_ENV
-        echo "RELEASE_DIRECTORY=prs_app\ProRacingSoftware\bin\Release" >> $env:GITHUB_ENV
-        echo "RELEASE_CHANGELOG=prs_app\changes.md" >> $env:GITHUB_ENV
 
     # Fix submodule branches
     - name: Checkout submodules to correct branch
@@ -83,7 +79,6 @@ jobs:
       uses: thedoctor0/zip-release@main
       with:
         type: 'zip'
-        directory: ${{ env.RELEASE_DIRECTORY }}
         filename: ${{ env.ZIP_FILENAME }}.zip
     
     # Create tag
@@ -104,8 +99,8 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         prerelease: ${{ env.RELEASE_PRE }}
-        body_path: ${{ github.workspace }}/${{ env.RELEASE_CHANGELOG }}
+        body_path: prs_app\changes.md
         name: ${{ env.RELEASE_KIND }} ${{ env.RELEASE_VERSION }}
-        tag_name: ${{ env.RELEASE_VERSION }}
+        tag_name: v${{ env.RELEASE_VERSION }}
         files: |
-          ./${{ env.RELEASE_DIRECTORY }}/${{ env.ZIP_FILENAME }}.zip
+          ${{ env.ZIP_FILENAME }}.zip
