@@ -20,30 +20,56 @@ jobs:
         token: ${{ secrets.PAT_TOKEN }}
         submodules: 'true'  # Certifica-se de que os submódulos sejam verificados
 
-    # Step para garantir que os submódulos estão na branch correta
+    - name: Set common env
+      run: |
+        echo "PROJECT_NAME=hg_app" >> $GITHUB_ENV
+        echo "RELEASE_DIRECTORY=./release" >> $GITHUB_ENV
+        echo "RELEASE_CHANGELOG=changes.md" >> $GITHUB_ENV
+
+    - name: Set alpha env
+      if: ${{ github.ref == 'refs/heads/develop' }}
+      run: |
+        echo "RELEASE_PRE=true" >> $GITHUB_ENV
+        echo "RELEASE_KIND=pre-release" >> $GITHUB_ENV
+
+    - name: Set beta env
+      if: ${{ github.ref == 'refs/heads/release' }}
+      run: |
+        echo "RELEASE_PRE=true" >> $GITHUB_ENV
+        echo "RELEASE_KIND=pre-release" >> $GITHUB_ENV
+
+    - name: Set release env
+      if: ${{ github.ref == 'refs/heads/main' }}
+      run: |
+        echo "RELEASE_PRE=false" >> $GITHUB_ENV
+        echo "RELEASE_KIND=release" >> $GITHUB_ENV
+
+    # Define variáveis de ambiente
+    - name: Set common environment variables
+      shell: pwsh
+      run: |
+        echo "ZIP_FILENAME=prs_app" >> $env:GITHUB_ENV
+        echo "RELEASE_DIRECTORY=prs_app\ProRacingSoftware\bin\Release" >> $env:GITHUB_ENV
+        echo "RELEASE_CHANGELOG=prs_app\changes.md" >> $env:GITHUB_ENV
+
+        $absolutePath = Resolve-Path "prs_app\ProRacingSoftware\bin\Release\ProRacingSoftware.exe"
+        $version = [System.Reflection.Assembly]::LoadFile($absolutePath.Path).GetName().Version
+        $versionString = "$($version.Major).$($version.Minor).$($version.Build).$($version.Revision)"
+
+        echo "RELEASE_VERSION=$versionString" >> $env:GITHUB_ENV
+
+    # Fix submodule branches
     - name: Checkout submodules to correct branch
       run: |
         $BRANCH_NAME = $Env:GITHUB_REF.Split('/')[-1]
         git submodule foreach "git checkout $BRANCH_NAME && git pull origin $BRANCH_NAME"
         
-    # Setup .NET SDK
-    - name: Install .NET SDK
-      run: choco install dotnet-8.0-sdk -y --no-progress
-      shell: pwsh
-
     # Setup .NET Framework
     - name: Install .NET Framework and required workloads
       run: |
         choco install visualstudio2022community -y --no-progress
         choco install visualstudio2022-workload-manageddesktop -y --no-progress
         choco install dotnet-6.0-sdk -y --no-progress
-      shell: pwsh
-      
-    # Check .NET available SDKs
-    - name: Ensure .NET SDK is available for MSBuild
-      run: |
-        echo "##[debug] .NET SDKs disponíveis:"
-        dotnet --list-sdks
       shell: pwsh
 
     # Build .NET solution
@@ -53,7 +79,29 @@ jobs:
         & "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe" "prs_app/ProRacingSoftware.sln" /p:Configuration=Release /p:Platform="Any CPU"
         dotnet publish prs_service\Prs.App.Service\Prs.App.Service.csproj -c Release -r win-x64 --self-contained true -o prs_app\ProRacingSoftware\bin\Release\service
 
-    # List files in prs_release/beta
-    - name: List files in prs_release/beta
+    # Create zip file
+    - name: Archive build
+      uses: thedoctor0/zip-release@main
+      with:
+        type: 'zip'
+        directory: ${{ env.RELEASE_DIRECTORY }}
+        filename: ${{ env.ZIP_FILENAME }}.zip
+    
+    # Create TAG
+    - name: Create and push tag
+      shell: bash
       run: |
-        dir prs_app\ProRacingSoftware\bin\Release
+        git tag v${{ env.RELEASE_VERSION }}
+        git push origin v${{ env.RELEASE_VERSION }}
+
+    # Create release
+    - name: Create release
+      if: ${{ github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/release' || github.ref == 'refs/heads/main' }}
+      uses: softprops/action-gh-release@v1
+      with:
+        prerelease: ${{ env.RELEASE_PRE }}
+        body_path: ${{ github.workspace }}/${{ env.RELEASE_CHANGELOG }}
+        name: ${{ env.RELEASE_KIND }} ${{ env.RELEASE_VERSION }}
+        tag_name: ${{ env.RELEASE_VERSION }}
+        files: |
+          ./${{ env.RELEASE_DIRECTORY }}/${{ env.ZIP_FILENAME }}.zip
