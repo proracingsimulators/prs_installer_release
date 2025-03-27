@@ -62,20 +62,13 @@ jobs:
       run: |
         $BRANCH_NAME = $Env:GITHUB_REF.Split('/')[-1]
         git submodule foreach "git checkout $BRANCH_NAME && git pull origin $BRANCH_NAME"
-        
-    # Setup .NET Framework
-    - name: Install .NET Framework and required workloads
-      shell: pwsh
-      run: |
-        choco install visualstudio2022-workload-manageddesktop -y --no-progress
-        choco install dotnet-6.0-sdk -y --no-progress
 
     # Build .NET solution
     - name: Build .NET solution
       shell: pwsh
       run: |
         nuget restore "prs_app/ProRacingSoftware.sln"
-        & "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe" "prs_app/ProRacingSoftware.sln" /p:Configuration=Release /p:Platform="Any CPU"
+        & "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\MSBuild.exe" "prs_app/ProRacingSoftware.sln" /p:Configuration=Release /p:Platform="Any CPU"
         dotnet publish prs_service\Prs.App.Service\Prs.App.Service.csproj -c Release -r win-x64 --self-contained true -o prs_app\ProRacingSoftware\bin\Release\service
 
     # Set version
