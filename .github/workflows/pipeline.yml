@@ -36,7 +36,7 @@ jobs:
       run: |
         choco install visualstudio2022community -y --no-progress
         choco install visualstudio2022-workload-manageddesktop -y --no-progress
-        choco install choco install dotnet-6.0-sdk -y --no-progress
+        choco install dotnet-6.0-sdk -y --no-progress
       shell: pwsh
       
     # Check .NET available SDKs
@@ -49,6 +49,7 @@ jobs:
     # Build .NET solution
     - name: Build .NET solution
       run: |
+        nuget restore "prs_app/ProRacingSoftware.sln"
         & "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe" "prs_app/ProRacingSoftware.sln" /p:Configuration=Release /p:Platform="Any CPU"
         dotnet publish prs_service\Prs.App.Service\Prs.App.Service.csproj -c Release -r win-x64 --self-contained true -o prs_app\ProRacingSoftware\bin\Release\service
 
