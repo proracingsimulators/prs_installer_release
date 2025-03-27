@@ -84,7 +84,7 @@ jobs:
       shell: pwsh
       run: |
         $absolutePath = Resolve-Path "prs_app\ProRacingSoftware\bin\Release\ProRacingSoftware.exe"
-        $version = [System.Reflection.Assembly]::LoadFile($absolutePath.Path).GetName().Version
+        $version = [System.Reflection.Assembly]::LoadFile("$($absolutePath.Path)").GetName().Version
         $versionString = "$($version.Major).$($version.Minor).$($version.Build).$($version.Revision)"
         echo "RELEASE_VERSION=$versionString" >> $env:GITHUB_ENV
 
