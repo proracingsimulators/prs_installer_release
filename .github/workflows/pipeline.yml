@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: windows-2022
 
     steps:
 
@@ -67,7 +67,6 @@ jobs:
     - name: Install .NET Framework and required workloads
       shell: pwsh
       run: |
-        choco install visualstudio2022community -y --no-progress
         choco install visualstudio2022-workload-manageddesktop -y --no-progress
         choco install dotnet-6.0-sdk -y --no-progress
 
@@ -99,12 +98,15 @@ jobs:
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
     
-    - name: Create and push tag
-      env:
-        GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
-      run: |
-        git tag v${{ env.RELEASE_VERSION }}
-        git push https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/${{ github.repository }}.git v${{ env.RELEASE_VERSION }}
+        uses: actions/github-script@v5
+        with:
+          script: |
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/tags/${{ env.RELEASE_VERSION }}',
+              sha: context.sha
+            })
 
     # Create release
     - name: Create release
