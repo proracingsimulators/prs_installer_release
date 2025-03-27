@@ -86,20 +86,17 @@ jobs:
         directory: ${{ env.RELEASE_DIRECTORY }}
         filename: ${{ env.ZIP_FILENAME }}.zip
     
-    - name: Configure Git
-      run: |
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
-    
-        uses: actions/github-script@v5
-        with:
-          script: |
-            github.rest.git.createRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: 'refs/tags/${{ env.RELEASE_VERSION }}',
-              sha: context.sha
-            })
+    # Create tag
+    - name: Create tag
+      uses: actions/github-script@v5
+      with:
+        script: |
+          github.rest.git.createRef({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            ref: 'refs/tags/<tagname>',
+            sha: context.sha
+          })
 
     # Create release
     - name: Create release
