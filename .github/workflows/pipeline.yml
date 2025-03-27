@@ -21,6 +21,7 @@ jobs:
         submodules: 'true'  # Certifica-se de que os submódulos sejam verificados
 
     - name: Set common env
+      shell: pwsh
       run: |
         echo "PROJECT_NAME=hg_app" >> $GITHUB_ENV
         echo "RELEASE_DIRECTORY=./release" >> $GITHUB_ENV
@@ -28,18 +29,21 @@ jobs:
 
     - name: Set alpha env
       if: ${{ github.ref == 'refs/heads/develop' }}
+      shell: pwsh
       run: |
         echo "RELEASE_PRE=true" >> $GITHUB_ENV
         echo "RELEASE_KIND=pre-release" >> $GITHUB_ENV
 
     - name: Set beta env
       if: ${{ github.ref == 'refs/heads/release' }}
+      shell: pwsh
       run: |
         echo "RELEASE_PRE=true" >> $GITHUB_ENV
         echo "RELEASE_KIND=pre-release" >> $GITHUB_ENV
 
     - name: Set release env
       if: ${{ github.ref == 'refs/heads/main' }}
+      shell: pwsh
       run: |
         echo "RELEASE_PRE=false" >> $GITHUB_ENV
         echo "RELEASE_KIND=release" >> $GITHUB_ENV
@@ -52,32 +56,37 @@ jobs:
         echo "RELEASE_DIRECTORY=prs_app\ProRacingSoftware\bin\Release" >> $env:GITHUB_ENV
         echo "RELEASE_CHANGELOG=prs_app\changes.md" >> $env:GITHUB_ENV
 
-        $absolutePath = Resolve-Path "prs_app\ProRacingSoftware\bin\Release\ProRacingSoftware.exe"
-        $version = [System.Reflection.Assembly]::LoadFile($absolutePath.Path).GetName().Version
-        $versionString = "$($version.Major).$($version.Minor).$($version.Build).$($version.Revision)"
-
-        echo "RELEASE_VERSION=$versionString" >> $env:GITHUB_ENV
-
     # Fix submodule branches
     - name: Checkout submodules to correct branch
+      shell: pwsh
       run: |
         $BRANCH_NAME = $Env:GITHUB_REF.Split('/')[-1]
         git submodule foreach "git checkout $BRANCH_NAME && git pull origin $BRANCH_NAME"
         
     # Setup .NET Framework
     - name: Install .NET Framework and required workloads
+      shell: pwsh
       run: |
         choco install visualstudio2022community -y --no-progress
         choco install visualstudio2022-workload-manageddesktop -y --no-progress
         choco install dotnet-6.0-sdk -y --no-progress
-      shell: pwsh
 
     # Build .NET solution
     - name: Build .NET solution
+      shell: pwsh
       run: |
         nuget restore "prs_app/ProRacingSoftware.sln"
         & "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe" "prs_app/ProRacingSoftware.sln" /p:Configuration=Release /p:Platform="Any CPU"
         dotnet publish prs_service\Prs.App.Service\Prs.App.Service.csproj -c Release -r win-x64 --self-contained true -o prs_app\ProRacingSoftware\bin\Release\service
+
+    # Set version
+    - name: Set Version
+      shell: pwsh
+      run: |
+        $absolutePath = Resolve-Path "prs_app\ProRacingSoftware\bin\Release\ProRacingSoftware.exe"
+        $version = [System.Reflection.Assembly]::LoadFile($absolutePath.Path).GetName().Version
+        $versionString = "$($version.Major).$($version.Minor).$($version.Build).$($version.Revision)"
+        echo "RELEASE_VERSION=$versionString" >> $env:GITHUB_ENV
 
     # Create zip file
     - name: Archive build
