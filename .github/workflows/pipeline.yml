@@ -23,28 +23,28 @@ jobs:
     - name: Set common env
       shell: pwsh
       run: |
-        echo "PROJECT_NAME=hg_app" >> $GITHUB_ENV
+        echo "PROJECT_NAME=hg_app" >> $env:GITHUB_ENV
 
     - name: Set alpha env
       if: ${{ github.ref == 'refs/heads/develop' }}
       shell: pwsh
       run: |
-        echo "RELEASE_PRE=true" >> $GITHUB_ENV
-        echo "RELEASE_KIND=pre-release" >> $GITHUB_ENV
+        echo "RELEASE_PRE=true" >> $env:GITHUB_ENV
+        echo "RELEASE_KIND=pre-release" >> $env:GITHUB_ENV
 
     - name: Set beta env
       if: ${{ github.ref == 'refs/heads/release' }}
       shell: pwsh
       run: |
-        echo "RELEASE_PRE=true" >> $GITHUB_ENV
-        echo "RELEASE_KIND=pre-release" >> $GITHUB_ENV
+        echo "RELEASE_PRE=true" >> $env:GITHUB_ENV
+        echo "RELEASE_KIND=pre-release" >> $env:GITHUB_ENV
 
     - name: Set release env
       if: ${{ github.ref == 'refs/heads/main' }}
       shell: pwsh
       run: |
-        echo "RELEASE_PRE=false" >> $GITHUB_ENV
-        echo "RELEASE_KIND=release" >> $GITHUB_ENV
+        echo "RELEASE_PRE=false" >> $env:GITHUB_ENV
+        echo "RELEASE_KIND=release" >> $env:GITHUB_ENV
 
     # Define variáveis de ambiente
     - name: Set common environment variables
@@ -80,18 +80,6 @@ jobs:
       with:
         type: 'zip'
         filename: ${{ env.ZIP_FILENAME }}.zip
-    
-    # Create tag
-    - name: Create tag
-      uses: actions/github-script@v5
-      with:
-        script: |
-          github.rest.git.createRef({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            ref: 'refs/tags/<tagname>',
-            sha: context.sha
-          })
 
     # Create release
     - name: Create release
